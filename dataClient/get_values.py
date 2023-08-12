@@ -30,8 +30,7 @@ def angulo_a_punto_cardinal(angulo):
 def main():
     reader = GraphiteReader()
     now = datetime.now()
-    return f"""Reporte del clima:
-Ubicación: Tolhuin, Tierra del Fuego, Argentina.
+    return f"""
 Fecha: {now.strftime('%d/%m/%Y')}.
 Hora: {now.strftime('%H:%M')}.
 
