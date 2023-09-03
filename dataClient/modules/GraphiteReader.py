@@ -28,42 +28,54 @@ class GraphiteReader:
         return value
 
     @property
-    def temperature(self):
+    def temperature(self) -> float:
         return self.get_last("fitoLab.tolhuin.Temperatura")
 
     @property
-    def humidity(self):
+    def humidity(self) -> float:
         return self.get_last("fitoLab.tolhuin.Humedad_relativa")
 
     @property
-    def light(self):
+    def light(self) -> int:
         return self.get_last("fitoLab.tolhuin.Luz")
 
     @property
-    def co2(self):
+    def co2(self) -> int:
         return self.get_last("fitoLab.tolhuin.CO2")
 
     @property
-    def external_temperature(self):
+    def external_temperature(self) -> float:
         return self.get_last("fitoLab.tolhuin.Temperatura_exterior")
 
     @property
-    def external_humidity(self):
+    def external_humidity(self) -> float:
         return self.get_last("fitoLab.tolhuin.Humedad_relativa_exterior")
 
     @property
-    def wind_speed_kmh(self):
+    def wind_speed_kmh(self) -> float:
         return self.get_last("fitoLab.tolhuin.Velocidad_del_viento") * 3.6
 
     @property
-    def wind_angle_deg(self):
+    def blinds(self) -> bool:
+        return self.get_last("fitoLab.tolhuin.Persianas") == 1
+
+    @property
+    def fans(self) -> bool:
+        return self.get_last("fitoLab.tolhuin.Extractores") == 1
+
+    @property
+    def power_ok(self) -> bool:
+        return self.get_last("fitoLab.tolhuin.ups.input_voltage") > 180
+
+    @property
+    def wind_angle_deg(self) -> float:
         return 360.0 - self.get_last("fitoLab.tolhuin.Angulo_del_viento")
 
     @property
-    def wind_angle_rad(self):
+    def wind_angle_rad(self) -> float:
         return (self.wind_angle_deg * 2 * np.pi / 360.0) + (np.pi / 2)
 
     @property
-    def is_day(self):
+    def is_day(self) -> bool:
         return self.light >= 10.0
 

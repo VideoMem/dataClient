@@ -1,6 +1,7 @@
 from modules.GraphiteReader import GraphiteReader
 from datetime import datetime
-
+from os import path
+from modules.FSUtils import delete_older_files
 
 def angulo_a_punto_cardinal(angulo):
     # Asegurarnos de que el ángulo esté entre 0 y 360
@@ -34,19 +35,25 @@ def main():
 Fecha: {now.strftime('%d/%m/%Y')}.
 Hora: {now.strftime('%H:%M')}.
 
-Los parámetros interiores son:
+Los parámetros interiores de los invernaderos son:
 
-Temperatura del invernadero {round(reader.temperature, 1)} grados, humedad {round(reader.humidity)}%.
-La iluminación en las bancadas de cultivo es de {round(reader.light)} lux y
-la concentración de dióxido de carbono en el aire es de {int(reader.co2)} ppm.
+Temperatura {round(reader.temperature, 1)} grados, humedad {round(reader.humidity)}%.
+Iluminación {round(reader.light)} lux.
 {"Es de noche." if not reader.is_day else "Es de día."}
+Concentración de dióxido de carbono en el aire {int(reader.co2)} ppm.
 
 Parámetros exteriores:
-La temperatura exterior de los invernaderos es de {round(reader.external_temperature, 1)} grados,
-mientras que la humedad es de {round(reader.external_humidity)}%.
-La velocidad del viento es {round(reader.wind_speed_kmh)} km/h con dirección {angulo_a_punto_cardinal(reader.wind_angle_deg)}.
+Temperatura {round(reader.external_temperature, 1)} grados.
+Humedad {round(reader.external_humidity)}%.
+La velocidad del viento es de {round(reader.wind_speed_kmh)} km/h con dirección {angulo_a_punto_cardinal(reader.wind_angle_deg)}.
+
+Ventanas {'abiertas' if reader.blinds else 'cerradas'}.
+Extractores {'encendidos' if reader.fans else 'apagados' }.
+
+{"El sistema de alimentación eléctrico funciona con normalidad" if reader.power_ok else "Hay corte de energía."}
 """
 
 
 if __name__ == '__main__':
+    delete_older_files(path.join(path.dirname(path.abspath(__file__)), 'logs'), max_days=8)
     print(main())
